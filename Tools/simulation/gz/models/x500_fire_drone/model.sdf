@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version='1.9'>
+  <model name='x500_fire_drone'>
+
+    <!-- Base drone -->
+    <include merge='true'>
+      <uri>x500</uri>
+    </include>
+
+    <!-- Mono Camera -->
+    <include merge='true'>
+      <uri>model://mono_cam</uri>
+      <pose>.12 .03 .242 0 0 0</pose>
+    </include>
+
+    <joint name="CameraJoint" type="fixed">
+      <parent>base_link</parent>
+      <child>camera_link</child>
+      <pose relative_to="base_link">.12 .03 .242 0 0 0</pose>
+    </joint>
+
+    <!-- Velodyne base -->
+    <link name="velodyne_base_link">
+      <pose relative_to="base_link">0.2 0 0.08 0 0.26 0</pose>
+
+    <!--  <inertial>
+        <mass>0.83</mass>
+        <inertia>
+          <ixx>0.000908059425</ixx>
+          <iyy>0.000908059425</iyy>
+          <izz>0.0011049624</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>-->
+      
+      <inertial>
+  <mass>0.001</mass>
+  <inertia>
+    <ixx>1e-8</ixx>
+    <iyy>1e-8</iyy>
+    <izz>1e-8</izz>
+    <ixy>0</ixy>
+    <ixz>0</ixz>
+    <iyz>0</iyz>
+  </inertia>
+</inertial>
+
+      <collision name="velodyne_base_collision">
+        <pose>0 0 0.03585 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.0516</radius>
+            <length>0.0717</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="velodyne_base_mount_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>velodyne_base_link</child>
+    </joint>
+
+<!-- Velodyne scan link -->
+<link name="velodyne">
+  <pose relative_to="velodyne_base_link">0 0 0.0377 0 0 0</pose>
+
+ <!-- <inertial>
+    <mass>0.01</mass>
+    <inertia>
+      <ixx>1e-7</ixx>
+      <iyy>1e-7</iyy>
+      <izz>1e-7</izz>
+      <ixy>0</ixy>
+      <ixz>0</ixz>
+      <iyz>0</iyz>
+    </inertia>
+  </inertial>-->
+  
+  <inertial>
+  <mass>0.001</mass>
+  <inertia>
+    <ixx>1e-8</ixx>
+    <iyy>1e-8</iyy>
+    <izz>1e-8</izz>
+    <ixy>0</ixy>
+    <ixz>0</ixz>
+    <iyz>0</iyz>
+  </inertia>
+</inertial>
+
+  <sensor name="velodyne-VLP16" type="gpu_lidar">
+    <pose>0 0 0 0 0 0</pose>
+    <topic>velodyne_points</topic>
+    <update_rate>10</update_rate>
+    <gz_frame_id>velodyne</gz_frame_id>
+
+        <lidar>
+          <scan>
+            <horizontal>
+              <samples>440</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.14159</min_angle>
+              <max_angle>3.14159</max_angle>
+            </horizontal>
+
+            <vertical>
+              <samples>16</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.261799</min_angle>
+              <max_angle>0.261799</max_angle>
+            </vertical>
+          </scan>
+
+          <range>
+            <min>0.5</min>
+            <max>131.0</max>
+            <resolution>0.001</resolution>
+          </range>
+
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.008</stddev>
+          </noise>
+        </lidar>
+
+        <always_on>1</always_on>
+        <visualize>true</visualize>
+      </sensor>
+    </link>
+
+    <joint name="velodyne_base_scan_joint" type="fixed">
+      <parent>velodyne_base_link</parent>
+      <child>velodyne</child>
+    </joint>
+
+  </model>
+</sdf>
